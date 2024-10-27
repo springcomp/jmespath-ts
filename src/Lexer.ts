@@ -223,7 +223,12 @@ class StreamLexer {
     }
     this._current += 1;
     const literal = stream.slice(start + 1, this._current - 1);
-    return literal.replace(`\\'`, `'`);
+
+    // emulating es2021: String.prototype.replaceAll()
+    return literal
+      .split(`\\\\`).join(`\\`)
+      .split(`\\'`).join(`'`)
+      ;
   }
 
   private consumeNumber(stream: string): LexerToken {
